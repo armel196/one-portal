@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Apps{% endblock %}
+
+{% block body %}
+    <h1>Edit Apps</h1>
+
+    {{ include('apps/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a class="rounded-full border px-4 bg-indigo-500 py-1 text-white" href="{{ path('app_apps_index') }}">back to list</a>
+
+    {{ include('apps/_delete_form.html.twig') }}
+{% endblock %}

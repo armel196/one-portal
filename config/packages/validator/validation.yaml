@@ -1,0 +1,18 @@
+App\Entity\Apps:
+    properties:
+        nom:
+            - NotBlank: ~
+            - Type: string
+        url:
+            - NotBlank: ~
+            - Type: string
+            
+        description:
+            - NotBlank: ~
+            - Type: string
+        client:
+            - NotBlank: ~
+            - Type: string
+        role:
+            - NotBlank: ~
+            - Type: string

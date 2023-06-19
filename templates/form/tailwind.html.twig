@@ -1,0 +1,15 @@
+{% use 'tailwind_2_layout.html.twig' %}
+
+
+{%- block form_row -%}
+{%- set row_attr = row_attr|merge({ class: row_attr.class|default(row_class|default('mb-4')) }) -%}
+{{- parent() -}}{%- endblock form_row -%}
+    {%- block widget_attributes -%}{%- set attr = attr|merge({ class: attr.class|default(widget_class|default('
+    mt-1 rounded w-full
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 800ms;
+    ')) ~ (disabled ? ' ' ~ widget_disabled_class|default('border-gray-300 text-gray-500')) ~ (errors|length ? ' ' ~ widget_errors_class|default('border-red-700')) }) -%}{{- parent() -}}{%- endblock widget_attributes -%}{%- block form_errors -%}{%- if errors|length > 0 -%}<ul>
+{%- for error in errors -%}
+	<li class="{{ error_item_class|default('error') }}">{{ error.message }}</li>
+{%- endfor -%}</ul>{%- endif -%}{%- endblock form_errors -%}

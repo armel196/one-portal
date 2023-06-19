@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Apps index
+{% endblock %}
+
+{% block body %}
+	<h1 class="mt-5 ml-5" >Apps index</h1>
+	{# <table>
+		<thead>
+			<tr class="border border-slate-300 ...">
+				<th>Id</th>
+				<th>Nom</th>
+				<th>Url</th>
+				<th>Description</th>
+				<th>Client</th>
+				<th>Role</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for app in apps %}
+				<tr class="border border-slate-300 ...">
+					<td>{{ app.id }}</td>
+					<td>{{ app.nom }}</td>
+					<td>{{ app.url }}</td>
+					<td>{{ app.description }}</td>
+					<td>{{ app.client }}</td>
+					<td>{{ app.role }}</td>
+					<td class="text-indigo-500 ">
+						<a  href="{{ path('app_apps_show', {'id': app.id}) }}">show</a>
+						<a href="{{ path('app_apps_edit', {'id': app.id}) }}">edit</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="7">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table> #}
+	<div class="flex flex-col">
+		<div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+			<div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+				<div class="overflow-hidden">
+					<table class="min-w-full text-left text-sm font-light">
+						<thead class="border-b font-medium dark:border-neutral-500">
+							<tr>
+								<th scope="col" class="px-6 py-4">Id</th>
+								<th scope="col" class="px-6 py-4">Nom</th>
+								<th scope="col" class="px-6 py-4">URL</th>
+								<th scope="col" class="px-6 py-4">DESCRIPTION</th>
+								<th scope="col" class="px-6 py-4">CLIENT</th>
+								<th scope="col" class="px-6 py-4">Role</th>
+                                <th scope="col" class="px-6 py-4">ACTION</th>
+
+
+							</tr>
+						</thead>
+						<tbody>
+							{# <tr class="border-b dark:border-neutral-500">
+								<td class="whitespace-nowrap px-6 py-4 font-medium">1</td>
+								<td class="whitespace-nowrap px-6 py-4">Mark</td>
+								<td class="whitespace-nowrap px-6 py-4">Otto</td>
+								<td class="whitespace-nowrap px-6 py-4">@mdo</td>
+							</tr> #}
+							{% for app in apps %} 
+								<tr class="border-b dark:border-neutral-500">
+									<td class="whitespace-nowrap px-6 py-4">{{ app.id }}</td>
+									<td class="whitespace-nowrap px-6 py-4">{{ app.nom }}</td>
+									<td class="whitespace-nowrap px-6 py-4">{{ app.url }}</td>
+									<td class="whitespace-nowrap px-6 py-4">{{ app.description }}</td>
+									<td class="whitespace-nowrap px-6 py-4">{{ app.client }}</td>
+									<td class="whitespace-nowrap px-6 py-4">{{ app.role }}</td>
+									<td class="text-indigo-500 ">
+										<a class="rounded-full border px-4 bg-indigo-500 py-1 text-white" href="{{ path('app_apps_show', {'id': app.id}) }}">show</a>
+										<a   class="rounded-full border px-4 bg-indigo-500 py-1 text-white" href="{{ path('app_apps_edit', {'id': app.id}) }}">edit</a>
+									</td>
+								</tr>
+							{% else %}
+								<tr>
+									<td colspan="7">no records found</td>
+								</tr>
+							{% endfor %}
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<a  class="mt-5 ml-5"  href="{{ path('app_apps_new') }}">Create new</a>
+{% endblock %}
