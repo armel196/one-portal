@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Apps index
+{% endblock %}
+
+{% block body %}
+	<main class="w-full text-black px-16 ">
+    
+        {% for app in apps %}
+            <div class="wrapper grid grid-cols-1 gap-3 mt-5 md:grid-cols-2 lg:grid-cols-3">
+
+                <div class="card p-4 bg-[#145787] text-white rounded-lg">
+
+                    <div class="flex items-center">
+
+                        <div class="circle mr-3">
+                            <img src="https://images.pexels.com/photos/14579361/pexels-photo-14579361.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Profil pict" style="
+                                width: 75px;
+                                height: 75px;
+                                border-radius: 50%;
+                                object-fit: cover;"
+                            />
+                        </div>
+
+                        <div class="UserInfo">
+                            <h5 class=" text-2xl font-bold mb-3">{{ app.nom}}</h5>
+                        </div>
+
+                    </div>
+
+                    <div class="descript my-2 mb-5">
+
+                        <p class="text-light Text_Description text-md">
+                           {{ app.description}}
+                        </p>
+
+                    </div>
+
+                    <div class="buttonLink d-flex justify-content-between py-2">
+                        <a   class="green_Button rounded-full  bg-[#93c01d] px-6 py-2  hover:bg-[#729716]">Details</a>
+                        {# <span class="green_Button rounded-full bg-[#93c01d] px-6 py-2  hover:bg-[#729716]">Details</span> #}
+                        {# <span class="green_Button">Edit</span>
+                        <span class="green_Button">option</span> #}
+                    </div>
+
+                </div>
+
+            </div>       
+        {% endfor %}
+        
+		
+
+	</main>
+
+{% endblock %}

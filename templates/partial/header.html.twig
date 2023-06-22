@@ -1,5 +1,5 @@
- <!-- Main navigation container -->
-<nav class="relative flex w-full flex-wrap items-center justify-between bg-neutral-900 py-2 text-neutral-200 shadow-lg lg:flex-wrap lg:justify-start lg:py-4" data-te-navbar-ref>
+<!-- Main navigation container -->
+<nav class="relative flex w-full flex-wrap items-center justify-between px-10 bg-[#1c3b72] py-2 text-white shadow-lg lg:flex-wrap lg:justify-start lg:py-4" data-te-navbar-ref>
 	<div
 		class="flex w-full flex-wrap items-center justify-between px-3">
 		<!-- Hamburger button for mobile view -->
@@ -17,17 +17,15 @@
 		<div
 			class="!visible mt-2 hidden flex-grow basis-[100%] items-center lg:mt-0 lg:!flex lg:basis-auto" id="navbarSupportedContent4" data-te-collapse-item>
 			<!-- Navbar title -->
-			<a class="pr-2 text-xl font-semibold text-white" href="#">Navbar</a>
+			<a class="text-xl font-semibold border-r-2 pr-6 mr-4 border-white-500 text-white" href="#">One-portal</a>
 			<!-- Left navigation links -->
-			<ul
-				class="list-style-none mr-auto flex flex-col pl-0 lg:flex-row" data-te-navbar-nav-ref>
+			<ul class="list-style-none mr-auto flex flex-col pl-0 lg:flex-row" data-te-navbar-nav-ref>
 
 				<!-- Team link -->
 				{# <li class="mb-4 lg:mb-0 lg:pr-2" data-te-nav-item-ref>
-					<a href="{{ path('app_register') }}" class="p-0 text-white opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400" href="#" data-te-nav-link-ref>Ajouter Apps</a>
-				</li> #}
-				<li class="mb-4 lg:mb-0 lg:pr-2" data-te-nav-item-ref>
-					<a href="{{ path('app_apps_index') }}" class="p-0 text-white opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400" href="#" data-te-nav-link-ref>Liste</a>
+									<a href="{{ path('app_register') }}" class="p-0 text-white opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400" href="#" data-te-nav-link-ref>Ajouter Apps</a>
+								</li> #}
+					<li class="mb-4 lg:mb-0 lg:pr-2" data-te-nav-item-ref> <a href="{{ path('app_apps_index') }}" class="p-0 text-white hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400" href="#" data-te-nav-link-ref>Liste</a>
 				</li>
 				<!-- Projects link -->
 
@@ -36,11 +34,9 @@
 
 		<!-- Right elements -->
 		<div class="relative flex items-center">
-			<div
-				class="relative" data-te-dropdown-ref>
+			<div class="relative" data-te-dropdown-ref>
 				<!-- Second dropdown trigger -->
-				{# {{ app.user.userIdentifier }}, #}
-				<a href="{{ path('app_logout') }}">Logout</a>
+				 {# {{ app.user.userIdentifier }}#} <a class="pl-6 ml-4 text-white border-l-2" href="{{ path('app_logout') }}"> Deconection</a> 
 			</div>
 		</div>
 		<!-- Right elements -->
@@ -56,7 +52,7 @@
 		{% endif %} #}
 <script>
 	// Initialization for ES Users
-    import {Dropdown, Collapse, initTE} from "tw-elements";
+import {Dropdown, Collapse, initTE} from "tw-elements";
 
-    initTE({Dropdown, Collapse});
+initTE({Dropdown, Collapse});
 </script>

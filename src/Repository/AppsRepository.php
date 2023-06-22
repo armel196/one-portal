@@ -39,20 +39,18 @@ class AppsRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Apps[] Returns an array of Apps objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('a')
-//            ->andWhere('a.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('a.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+   /**
+    * @return Apps[] Returns an array of Apps objects
+    */
+   public function findByRole($value): array
+   {
+       return $this->createQueryBuilder('a')
+           ->andWhere('a.role  = :val')
+           ->setParameter('val', $value)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
 
 //    public function findOneBySomeField($value): ?Apps
 //    {

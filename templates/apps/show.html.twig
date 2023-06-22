@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+  {% extends 'base.html.twig' %} 
 
 {% block title %}Apps{% endblock %}
 
@@ -34,9 +34,11 @@
         </tbody>
     </table>
 
-    <a  class="rounded-full border px-4 bg-indigo-500 py-1 text-white" href="{{ path('app_apps_index') }}">back to list</a>
+    <a  class="rounded-full border px-7  py-2 font-semibold  bg-[#93c01] text-white" href="{{ path('app_apps_index') }}">back to list</a>
 
-    <a  class="rounded-full border px-4 bg-indigo-500 py-1 text-white" href="{{ path('app_apps_edit', {'id': app.id}) }}">edit</a>
+    <a  class="rounded-full border px-7  py-2 font-semibold  bg-[#93c01d] text-white" href="{{ path('app_apps_edit', {'id': app.id}) }}">edit</a>
 
     {{ include('apps/_delete_form.html.twig') }}
-{% endblock %}
+{% endblock %}  
+
+                                                                           
