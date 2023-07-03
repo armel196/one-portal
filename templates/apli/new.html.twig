@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Apps{% endblock %}
+
+{% block body %}
+    <h1>Create new Apps</h1>
+
+    {{ include('apli/_form.html.twig') }}
+
+    <a href="{{ path('app_apli_index') }}">back to list</a>
+{% endblock %}

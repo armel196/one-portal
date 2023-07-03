@@ -12,7 +12,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 class Apps
 {
     private $update;
-    private $createdAt;
+    
     public function __construct()
     {
         $this->update= new \DateTimeImmutable();
@@ -37,17 +37,11 @@ class Apps
     #[ORM\Column(length: 255)]
     private ?string $role = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $image = null;
-
     #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'imageName')]
     private ?File $imageFile = null;
 
     #[ORM\Column(nullable: true)]
     private ?string $imageName = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $updatedAt = null;
 
     public function getId(): ?int
     {
@@ -110,18 +104,6 @@ class Apps
     public function setRole(string $role): static
     {
         $this->role = $role;
-
-        return $this;
-    }
-
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(string $image): static
-    {
-        $this->image = $image;
 
         return $this;
     }

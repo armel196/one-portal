@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Apps index{% endblock %}
+
+{% block body %}
+    <h1>Apps index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Url</th>
+                <th>Description</th>
+                <th>Client</th>
+                <th>Role</th>
+                <th>ImageName</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for app in apps %}
+            <tr>
+                <td>{{ app.id }}</td>
+                <td>{{ app.nom }}</td>
+                <td>{{ app.url }}</td>
+                <td>{{ app.description }}</td>
+                <td>{{ app.client }}</td>
+                <td>{{ app.role }}</td>
+                <td>{{ app.imageName }}</td>
+                <td>
+                    <a href="{{ path('app_apli_show', {'id': app.id}) }}">show</a>
+                    <a href="{{ path('app_apli_edit', {'id': app.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_apli_new') }}">Create new</a>
+{% endblock %}

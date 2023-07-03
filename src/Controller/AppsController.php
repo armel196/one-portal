@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Apps;
 use App\Form\AppsType;
+use App\Form\RegisterAppsType;
+use App\Form\RegisType;
 use App\Repository\AppsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,7 +31,7 @@ class AppsController extends AbstractController
     public function new(Request $request, AppsRepository $appsRepository): Response
     {
         $app = new Apps();
-        $form = $this->createForm(AppsType::class, $app);
+        $form = $this->createForm(RegisterAppsType::class, $app);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

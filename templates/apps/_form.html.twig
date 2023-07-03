@@ -3,6 +3,7 @@
 
         {{ form_start(form) }}
         {{ form_row(form) }}
+		{# {{ form_row(form.imageFile) }} #}
         <button class="rounded-full border px-4 font-semibold bg-[#93c01d] py-1 text-white">{{ button_label|default('save') }}</button>
         <a class="rounded-full border px-7  py-2 font-semibold  bg-[#93c01d] text-white" href="{{ path('app_apps_index') }}">back to list</a>
 

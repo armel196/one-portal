@@ -16,12 +16,13 @@
 						<table class="min-w-full text-left text-sm font-light">
 							<thead class="border-b font-medium dark:border-neutral-500 bg-[#1c3b72] text-white ">
 								<tr>
-									<th scope="col" class="px-6 py-4">Id</th>
-									<th scope="col" class="px-6 py-4">Nom</th>
+									<th scope="col" class="px-6 py-4">ID</th>
+									<th scope="col" class="px-6 py-4">NOM</th>
 									<th scope="col" class="px-6 py-4">URL</th>
 									<th scope="col" class="px-6 py-4">DESCRIPTION</th>
 									<th scope="col" class="px-6 py-4">CLIENT</th>
-									<th scope="col" class="px-6 py-4">Role</th>
+									<th scope="col" class="px-6 py-4">ACTION</th>
+									<th scope="col" class="px-6 py-4">IMAGE</th>
 									<th scope="col" class="px-6 py-4">ACTION</th>
 
 
@@ -42,6 +43,7 @@
 										<td class="whitespace-nowrap px-6 py-4">{{ app.description }}</td>
 										<td class="whitespace-nowrap px-6 py-4">{{ app.client }}</td>
 										<td class="whitespace-nowrap px-6 py-4">{{ app.role }}</td>
+										<td class="whitespace-nowrap px-6 py-4"><div class="circle mr-3  "><img class="h-10 w-20"  src="{{vich_uploader_asset(app, 'imageFile')}}" /></div></td>
 										<td class="text-indigo-500 ">
 											<a class="rounded-full border px-4 font-semibold bg-[#93c01d] py-1 text-white" href="{{ path('app_apps_edit', {'id': app.id}) }}">edit</a>
 											<a class="rounded-full border px-4 font-semibold bg-[#93c01d] py-1 text-white" href="{{ path('app_apps_delete', {'id': app.id}) }}">delete</a>
