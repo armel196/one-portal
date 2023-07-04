@@ -35,12 +35,12 @@ class Apps
     private ?string $client = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $role = null;
+    private ?array $role = [];
 
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
-    #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'imageName')]
+    #[Vich\UploadableField(mapping: 'image', fileNameProperty: 'imageName')]
     private ?File $imageFile = null;
 
     #[ORM\Column(nullable: true)]
@@ -107,7 +107,7 @@ class Apps
         return $this->role;
     }
 
-    public function setRole(string $role): static
+    public function setRole(string ...$role): static
     {
         $this->role = $role;
 
@@ -133,7 +133,7 @@ class Apps
         if (null !== $imageFile) {
             // It is required that at least one field changes if you are using doctrine
             // otherwise the event listeners won't be called and the file is lost
-            $this->update = new \DateTimeImmutable();
+            $this->updatedAt = new \DateTimeImmutable();
         }
     }
 
