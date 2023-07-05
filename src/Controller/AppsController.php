@@ -81,4 +81,11 @@ class AppsController extends AbstractController
 
         return $this->redirectToRoute('app_apps_index', [], Response::HTTP_SEE_OTHER);
     }
+    #[Route('/delete/{id}', name: 'apps_delete', methods: ['GET'])]
+    public function deleteApps(Request $request, Apps $app, AppsRepository $appsRepository): Response
+    {
+        dd($request);
+       
+        return $this->redirectToRoute('app_apps_index', [], Response::HTTP_SEE_OTHER);
+    }
 }

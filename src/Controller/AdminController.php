@@ -110,7 +110,7 @@ class AdminController extends AbstractController
         $em->remove($apps);
         $em->flush();
 
-        return new RedirectResponse($this->urlGenerator->generate('app_liste'));
+        return new RedirectResponse($this->urlGenerator->generate('app_apps_index'));
 
   
     }

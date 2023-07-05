@@ -3,9 +3,10 @@
 
 {%- block form_row -%}
 {%- set row_attr = row_attr|merge({ class: row_attr.class|default(row_class|default('mb-4')) }) -%}
-{{- parent() -}}{%- endblock form_row -%}
-    {%- block widget_attributes -%}{%- set attr = attr|merge({ class: attr.class|default(widget_class|default('
-    mt-1 rounded w-full
+{{- parent() -}}
+{%- endblock form_row -%}
+{%- block widget_attributes -%}{%- set attr = attr|merge({ class: attr.class|default(widget_class|default('
+    mt-1 rounded w-full s
     transition-property: all;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 800ms;

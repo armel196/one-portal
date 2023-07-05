@@ -33,9 +33,9 @@ class LoginAuthenticator extends AbstractAuthenticator
     private $provider;
 
     public function __construct(
-        private UserRepository $userRepository,private UrlGeneratorInterface $urlGenerator
+        private UserRepository $userRepository,
+        private UrlGeneratorInterface $urlGenerator
     ) {
-        // $this->decoded = new TokenDecoded(['payload_key' => 'value'], ['header_key' => 'value']);
         $key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqX6Vah/jb8aUe/VTaY0UrIDvScWjKF20bs/Bh2HSS/PLgjDWufzWaPDr49N7AkxlB/fNPbxwhK75f42z1bQQwgag5/+SuRV6GKxrKsfB+GfWOLyzaRecpLHT7DK6QdBdqG8vwCP+C+Kp6pnzKSRbAvobfpTwniUrhES04awWf6Ktwsttqj4NZNYnLNoIXgsdm0qFJgkqCLgqzfgB6gfpw1qE4OZAAvkAWyBCJnBKdxHHMxDyWJ86AD3FzXuoTS9y/gCDfimXhl5WoODnmfNBWdMDFltXy55sSiR0ZjklIzyeFDnqQztFs9R7mbV7BZb/9yOCHt+Az0Qyd/WMIcmciQIDAQAB";
 
         $this->provider = new Keycloak([
@@ -55,9 +55,8 @@ class LoginAuthenticator extends AbstractAuthenticator
 
     public function start(Request $request, \Symfony\Component\Security\Core\Exception\AuthenticationException $authException = null)
     {
+
         if ($request->attributes->get('_route') === 'app_keycloak_login') {
-            # code...
-            // return $this->redirectToRoute('app_keycloak_login');
             return new RedirectResponse(
                 '/login', // might be the site, where users choose their oauth provider
                 Response::HTTP_TEMPORARY_REDIRECT
@@ -71,7 +70,7 @@ class LoginAuthenticator extends AbstractAuthenticator
      */
     public function supports(Request $request): ?bool
     {
-
+        // dd($request);
         return $request->attributes->get('_route') === 'app_keycloak_callback';
     }
 
@@ -81,14 +80,20 @@ class LoginAuthenticator extends AbstractAuthenticator
             'code' => $request->query->get('code')
         ]);
 
+        // session_start();
+
+        $session = $request->getSession();
+        $session->set('accessToken', $token->getValues());
+
+        ($session->set('accessToken', $token->getValues()));
+
         if (null === $token) {
-            // The token header was empty, authentication fails with HTTP Status
-            // Code 401 "Unauthorized"
+
             throw new CustomUserMessageAuthenticationException('No API token provided');
         }
+      
         JWT::$leeway = 60;
         $decoded = JWT::decode($token->getToken(), new Key($_ENV['KEYCLOAK_PK'], 'RS256'));
-        // dd($decoded);
         return new SelfValidatingPassport(
 
             new UserBadge(json_encode($decoded), function (string $userInfo) {
@@ -97,8 +102,6 @@ class LoginAuthenticator extends AbstractAuthenticator
 
                 $userId = $info['sid'];
 
-                // dd($userId);
-
                 $email = key_exists('email', $info) ? $info['email'] : '';
 
                 $name = key_exists('preferred_username', $info) ? $info['preferred_username'] : '';
@@ -106,9 +109,7 @@ class LoginAuthenticator extends AbstractAuthenticator
                 $ro = key_exists('resource_access', $info) ? $info['resource_access'] : '';
                 $roles = key_exists('one-portal', $ro) ? $ro['one-portal']['roles'] : '';
                 $given_name = key_exists('given_name', $info) ? $info['given_name'] : '';
-                //  dd($roles);
                 $user = $this->userRepository->findByEmail($email);
-                //  dd($email);
                 if (null === $user) {
                     $user = new User();
                     $user->setEmail($email);
@@ -119,10 +120,7 @@ class LoginAuthenticator extends AbstractAuthenticator
                 $user->setFullName($given_name);
                 $user->setName($name);
                 $this->userRepository->save($user, true);
-                // dd($decoded->resource_access->{'one-portal'}->roles);
-
                 return $user;
-                
             })
 
         );
@@ -133,13 +131,12 @@ class LoginAuthenticator extends AbstractAuthenticator
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
-      
-        if (in_array('ROLE_ADMIN',$token->getUser()->getRoles())) {
-            return new RedirectResponse($this->urlGenerator->generate('app_admin'));
-        }else {
+
+        if (in_array('ROLE_ADMIN', $token->getUser()->getRoles())) {
+            return new RedirectResponse($this->urlGenerator->generate('app_apps_index'));
+        } else {
             return new RedirectResponse($this->urlGenerator->generate('app_user'));
         }
-     
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response

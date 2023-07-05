@@ -10,13 +10,20 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		{% block stylesheets %}
 			{{ encore_entry_link_tags('app') }}
-			<script type="module" src="https://cdn.skypack.dev/@hotwired/turbo"></script>
+
 
 		{% endblock %}
 		<!--Footer container-->
 
 		{% block javascripts %}
+			<script type="module" src="https://cdn.skypack.dev/@hotwired/turbo"></script>
 			{{ encore_entry_script_tags('app') }}
+			<script type="module">
+				// Initialization for ES Users
+				import {Dropdown, Collapse, initTE} from "tw-elements";
+
+				initTE({Dropdown, Collapse});
+			</script>
 		{% endblock %}
 	</head>
 	<body>
