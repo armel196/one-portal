@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Apps{% endblock %}
+
+{% block body %}
+    <h1>Apps</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ app.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ app.nom }}</td>
+            </tr>
+            <tr>
+                <th>Url</th>
+                <td>{{ app.url }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ app.description }}</td>
+            </tr>
+            <tr>
+                <th>Client</th>
+                <td>{{ app.client }}</td>
+            </tr>
+            <tr>
+                <th>Role</th>
+                <td>{{ app.role }}</td>
+            </tr>
+            <tr>
+                <th>ImageName</th>
+                <td>{{ app.imageName }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_apli_index') }}">back to list</a>
+
+    <a href="{{ path('app_apli_edit', {'id': app.id}) }}">edit</a>
+
+    {{ include('apli/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,13 +1,17 @@
 {# {% form_theme form 'tailwind_2_layout.html.twig' %}   #}
-    <div class="w-11/12 max-w-md lg:ml-14 ml-3 ">
+<div class="w-full  ">
+	<div class="mx-auto w-full md:w-6/12 px-4 md:px-0">
 
-        {{ form_start(form) }}
-        {{ form_row(form) }}
-        <button class="rounded-full border px-4 font-semibold bg-[#93c01d] py-1 text-white">{{ button_label|default('save') }}</button>
-        <a class="rounded-full border px-7  py-2 font-semibold  bg-[#93c01d] text-white" href="{{ path('app_apps_index') }}">back to list</a>
+		{{ form_start(form) }}
+		{{ form_row(form) }}
+		{# {{ form_row(form.imageFile) }} #}
+		<button class="rounded-full border px-4 font-semibold bg-[#93c01d] py-1 text-white">{{ button_label|default('save') }}</button>
+		<a class="rounded-full border px-7  py-2 font-semibold  bg-[#93c01d] text-white" href="{{ path('app_apps_index') }}">back to list</a>
 
-        {{ form_end(form) }}
-    </div>
+		{{ form_end(form) }}
+	</div>
+
+</div>
 
 {# {{ form_start(form) }}
 	<div class="my-custom-class-for-errors"> {{ form_errors(form) }}

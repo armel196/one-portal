@@ -6,12 +6,8 @@ use App\Entity\Apps;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\StringType;
-use Vich\UploaderBundle\Form\Type\VichImageType;
 
-class RegisterAppsType extends AbstractType
+class ResgisterType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -21,11 +17,6 @@ class RegisterAppsType extends AbstractType
             ->add('description')
             ->add('client')
             ->add('role')
-            ->add('imageFile',VichImageType::class,
-            [
-              
-            ])
-            // ->add('save', SubmitType::class)
         ;
     }
 

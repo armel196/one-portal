@@ -1,38 +1,89 @@
 <?php
 
 namespace App\Controller;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
+use App\Entity\User;
+use App\Repository\UserRepository;
+use App\UserProvider;
+use Doctrine\ORM\EntityManagerInterface;
+use Exception;
+use League\OAuth2\Client\Token\AccessToken;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use  Stevenmaguire\OAuth2\Client\Provider\Keycloak;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Http\AccessMap;
+
+
+// use Nowakowskir\JWT\JWT;
+
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class SecurityController extends AbstractController
 {
+    private $provider;
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
+    public function __construct(
+        private UserRepository $UsersRepository,
+        private EntityManagerInterface $em,
+        private UrlGeneratorInterface $urlGenerator
+    ) {
+        // $this->decoded = new TokenDecoded(['payload_key' => 'value'], ['header_key' => 'value']);
+        $key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqX6Vah/jb8aUe/VTaY0UrIDvScWjKF20bs/Bh2HSS/PLgjDWufzWaPDr49N7AkxlB/fNPbxwhK75f42z1bQQwgag5/+SuRV6GKxrKsfB+GfWOLyzaRecpLHT7DK6QdBdqG8vwCP+C+Kp6pnzKSRbAvobfpTwniUrhES04awWf6Ktwsttqj4NZNYnLNoIXgsdm0qFJgkqCLgqzfgB6gfpw1qE4OZAAvkAWyBCJnBKdxHHMxDyWJ86AD3FzXuoTS9y/gCDfimXhl5WoODnmfNBWdMDFltXy55sSiR0ZjklIzyeFDnqQztFs9R7mbV7BZb/9yOCHt+Az0Qyd/WMIcmciQIDAQAB";
+
+        $this->provider = new Keycloak([
+            'authServerUrl'         => 'http://localhost:8080',
+            'realm'                 =>  'dev',
+            'clientId'              => $_ENV['KEYCLOAK_CLIENDID'],
+            'clientSecret'          => $_ENV['KEYCLOAK_CLIENTSECRET'],
+            'redirectUri'           => $_ENV['KEYCLOAK_HOME'],
+            'encryptionAlgorithm'   => 'RS256',                             // optional
+            // 'encryptionKeyPath'     => '../key.pem',                         // optional
+            'encryptionKey'         => $key,
+            'version'               => '21.0.2',                            // optional
+
+
+        ]);
+    }
+
+    #[Route('/login', name: 'app_keycloak_login')]
+    public function keycloalLOgin(): Response
+    {
+        $authUrl = $this->provider->getAuthorizationUrl();
+
+        return $this->redirect($authUrl);
+    }
+
+    #[Route('/', name: 'app_route_principale')]
+    public function seConnecter(): Response
+    {
+        return $this->render('use/use.html.twig', [
+            'controller_name' => 'DashboardController',
+        ]);
+    }
+
+    #[Route('/keycloak-callback', name: 'app_keycloak_callback')]
+    public function keycloakCallback()
     {
     }
-    #[Route(path: '/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
-    {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
 
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
+    #[Route(path: '/Deconnection', name: 'app_log')]
+    public function log(Request $request): Response
+     {
+        $session = $request->getSession();
+            // dd($session->get('accessToken'));     
 
-        return $this->render('security/login2.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        return  $this->redirect($this->provider->getLogoutUrl([
+            "redirect_uri" => $_ENV['KEYCLOAK_LOGOUT'],
+            "access_token" =>  $session->get('accessToken')
+        ]));
+
+
+        
     }
 
-    #[Route(path: '/logout', name: 'app_logout')]
-    public function logout()
-    {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
-       // return new RedirectResponse($this->urlGenerator->generate('app_login'));
-    }
 }
