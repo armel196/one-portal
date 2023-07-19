@@ -19,9 +19,9 @@ class KeycloakHttpRequest
     {
         $response = self::httpClient()->request('POST', $_ENV['KEYCLOAK_GET_TOKEN_URL'], [
             'body' => [
-                'grant_type' => 'password',
-                'client_id' => 'take-token',
-                'client_secret' => 'v6DXOMebBl1LYiF8H3tg6BVfQQOFcDht',
+                'grant_type' =>  $_ENV['GRANT_TYPE'],
+                'client_id' => $_ENV['ORTHER_KEYCLOAK_CLIENT_ID'],
+                'client_secret' => $_ENV['ORTHER_KEYCLOAK_CLIENT_SECRET'],
                 'username' => 'lambert@gmail.com',
                 'password' => 'password'
             ],

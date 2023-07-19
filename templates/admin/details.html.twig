@@ -14,11 +14,11 @@
 			<div class="card p-4 bg-[#145787]  w-96  text-white rounded-lg">
 
 				<div class="flex flex-col  items-left">
-                    {# 
+                    
 					<div class="w-full h-36">
-						<img src="{{vich_uploader_asset(app, 'imageFile','App\\Entity\\Apps')}}" style="object-fit: cover;" class="w-full h-full"/>
+						<img src="{{vich_uploader_asset(application, 'imageFile')}}" style="object-fit: cover;" class="w-full h-full"/>
 
-					</div> #}
+					</div>
 
 					<div class="UserInfo text-left mt-5 ">
 						<b> Nom:</b> 
@@ -37,13 +37,6 @@
 
 				</div>
 
-				 <div class="descript my-2 mb-5">
-					<b>Client:</b>
-					<p class="text-light font-bold  text-ellipsis overflow-hidden Text_Description text-md">
-						 {{  application.client}}
-					</p>
-
-				</div>
 			</div>
 
 
