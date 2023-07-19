@@ -75,25 +75,23 @@ class LoginAuthenticator extends AbstractAuthenticator
     }
 
     public function authenticate(Request $request): Passport
-    {
+    {       
         $token = $this->provider->getAccessToken('authorization_code', [
             'code' => $request->query->get('code')
         ]);
-
-        // session_start();
-
         $session = $request->getSession();
         $session->set('accessToken', $token->getValues());
-
-        ($session->set('accessToken', $token->getValues()));
-
+        
+        
         if (null === $token) {
-
+            
             throw new CustomUserMessageAuthenticationException('No API token provided');
         }
-      
+        
         JWT::$leeway = 60;
         $decoded = JWT::decode($token->getToken(), new Key($_ENV['KEYCLOAK_PK'], 'RS256'));
+
+        // dd($decoded);
         return new SelfValidatingPassport(
 
             new UserBadge(json_encode($decoded), function (string $userInfo) {
@@ -109,6 +107,7 @@ class LoginAuthenticator extends AbstractAuthenticator
                 $ro = key_exists('resource_access', $info) ? $info['resource_access'] : '';
                 $roles = key_exists('one-portal', $ro) ? $ro['one-portal']['roles'] : '';
                 $given_name = key_exists('given_name', $info) ? $info['given_name'] : '';
+                // dd($ro);
                 $user = $this->userRepository->findByEmail($email);
                 if (null === $user) {
                     $user = new User();
@@ -131,6 +130,8 @@ class LoginAuthenticator extends AbstractAuthenticator
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
+
+        // dd($token->getUser()->getRoles());
 
         if (in_array('ROLE_ADMIN', $token->getUser()->getRoles())) {
             return new RedirectResponse($this->urlGenerator->generate('app_apps_index'));

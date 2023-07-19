@@ -1,7 +1,7 @@
 <!-- Main navigation container -->
 
 
-<nav class="relative flex w-full flex-wrap items-center justify-between px-10 bg-[#1c3b72] py-2 text-white shadow-lg lg:flex-wrap lg:justify-start lg:py-4" data-te-navbar-ref>
+<nav class="relative flex w-full flex-wrap items-center justify-between px-10 bg-[#145787] py-2 text-white shadow-lg lg:flex-wrap lg:justify-start lg:py-4" data-te-navbar-ref>
 	<div
 		class="flex w-full flex-wrap items-center justify-between px-3">
 		<!-- Hamburger button for mobile view -->
@@ -27,15 +27,19 @@
 				<!-- Team link -->
 				{% if is_granted('ROLE_ADMIN') == true %}
 					<li class="mb-4 lg:mb-0 lg:pr-2" data-te-nav-item-ref>
-						<a href="{{ path('app_apps_index') }}" class="p-0 text-white hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400" href="#" data-te-nav-link-ref>Liste des Applications</a>
+						<a href="{{ path('app_card') }}" class="p-0 text-white hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400" href="#" data-te-nav-link-ref>Liste des Applications</a>
 					</li>
 					<li class="mb-4 lg:mb-0 lg:pr-2" data-te-nav-item-ref>
-						<a href="{{ path('app_apps_index') }}" class="p-0 text-white hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400" href="#" data-te-nav-link-ref>Administration</a>
+						<a href="{{path('app_apps_index')}}" class="p-0 text-white hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400" href="#" data-te-nav-link-ref>Administration</a>
 					</li>
+					
 				{% endif %}
+				{% if is_granted('ROLE_USER') == true %}
+
 				<li class="mb-4 lg:mb-0 lg:pr-2" data-te-nav-item-ref>
-					<a href="{{ path('app_apps_index') }}" class="p-0 text-white hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400" href="#" data-te-nav-link-ref>Montrer les cardes</a>
+					<a href="{{ path('app_user') }}" class="p-0 text-white hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400" href="#" data-te-nav-link-ref>Mes Applications</a>
 				</li>
+				{% endif %}
 
 
 				<!-- Projects link -->
@@ -46,55 +50,16 @@
 		<!-- Right elements -->
 		<div class="relative flex items-center">
 			<div class="relative" data-te-dropdown-ref>
-				<!-- Second dropdown trigger -->
-				{# {{ app.user.userIdentifier }}#}
-					<a href="{{ path('app_log') }}" class="pl-6 ml-4 text-white border-l-2"> Deconection</a>
+				 
+				
+				{# {{ app.user.userIdentifier }} #}
+					<a href="{{ path('app_log') }}" class="pl-6 ml-4 font-semibold text-white border-l-2">Se Deconnecter</a>
 			</div>
 		</div>
 		<!-- Right elements -->
 	</div>
 </nav>
 
-
-{# {% if  is_granted('ROLE_USER') == true  %}
-	<nav class="relative flex w-full flex-wrap items-center justify-between px-10 bg-[#1c3b72] py-2 text-white shadow-lg lg:flex-wrap lg:justify-start lg:py-4" data-te-navbar-ref>
-		<div
-			class="flex w-full flex-wrap items-center justify-between px-3">
-			<!-- Hamburger button for mobile view -->
-			<button
-				class="block border-0 bg-transparent px-2 text-neutral-200 hover:no-underline hover:shadow-none focus:no-underline focus:shadow-none focus:outline-none focus:ring-0 lg:hidden" type="button" data-te-collapse-init data-te-target="#navbarSupportedContent4" aria-controls="navbarSupportedContent4" aria-expanded="false" aria-label="Toggle navigation">
-				<!-- Hamburger icon -->
-				<span class="[&>svg]:w-7">
-					<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" fill="currentColor" class="h-7 w-7">
-						<path fill-rule="evenodd" d="M3 6.75A.75.75 0 013.75 6h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 6.75zM3 12a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 12zm0 5.25a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75z" clip-rule="evenodd"/>
-					</svg>
-				</span>
-			</button>
-
-			<!-- Collapsible navigation container -->
-			<div
-				class="!visible mt-2 hidden flex-grow basis-[100%] items-center lg:mt-0 lg:!flex lg:basis-auto" id="navbarSupportedContent4" data-te-collapse-item>
-				<!-- Navbar title -->
-				<a class="text-xl font-semibold border-r-2 pr-6 mr-4 border-white-500 text-white" href="#">One-portal</a>
-				<!-- Left navigation links -->
-				<ul
-					class="list-style-none mr-auto flex flex-col pl-0 lg:flex-row" data-te-navbar-nav-ref>
-					<!-- Projects link -->
-					<li class="mb-4 lg:mb-0 lg:pr-2" data-te-nav-item-ref>
-						<a class="p-0 text-white hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400" href="#" data-te-nav-link-ref>Mes Applications</a>
-					</li>
-
-				</ul>
-			
-			</div>
-
-			{# <!-- Right elements -->
-			<div class="relative flex items-center">
-				<div class="relative" data-te-dropdown-ref>
-					<!-- Second dropdown trigger -->
-					{# {{ app.user.userIdentifier }}#}
-{# <a href="{{ path('app_log') }}" class="pl-6 ml-4 text-white border-l-2">
-	Deconection</a></div></div><!-- Right elements --></div></nav>{% endif %}{# {% if app.user %} #}
 			{# <div class="mb-3">
 				You are logged in as
 				{{ app.user.userIdentifier }},

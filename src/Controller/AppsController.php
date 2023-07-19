@@ -7,6 +7,7 @@ use App\Form\AppsType;
 use App\Form\RegisterAppsType;
 use App\Form\RegisType;
 use App\Repository\AppsRepository;
+use App\Service\KeycloakHttpRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,7 +29,7 @@ class AppsController extends AbstractController
     }
 
     #[Route('/new', name: 'app_apps_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, AppsRepository $appsRepository): Response
+    public function new(Request $request, AppsRepository $appsRepository, KeycloakHttpRequest $KeycloakHttpRequest): Response
     {
         $app = new Apps();
         $form = $this->createForm(RegisterAppsType::class, $app);
@@ -39,10 +40,14 @@ class AppsController extends AbstractController
 
             return $this->redirectToRoute('app_apps_index', [], Response::HTTP_SEE_OTHER);
         }
+        $tok = $KeycloakHttpRequest->getToken();
+        $client = $KeycloakHttpRequest->getAllClientOfTheRealm($tok);
 
+        //  dd($client);
         return $this->renderForm('apps/new.html.twig', [
             'app' => $app,
             'form' => $form,
+            'client'=>$client
         ]);
     }
 
@@ -57,7 +62,7 @@ class AppsController extends AbstractController
     #[Route('/{id}/edit', name: 'app_apps_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Apps $app, AppsRepository $appsRepository): Response
     {
-        $form = $this->createForm(AppsType::class, $app);
+        $form = $this->createForm(RegisterAppsType::class, $app);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -75,7 +80,7 @@ class AppsController extends AbstractController
     #[Route('/{id}', name: 'app_apps_delete', methods: ['POST'])]
     public function delete(Request $request, Apps $app, AppsRepository $appsRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$app->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $app->getId(), $request->request->get('_token'))) {
             $appsRepository->remove($app, true);
         }
 
@@ -84,8 +89,8 @@ class AppsController extends AbstractController
     #[Route('/delete/{id}', name: 'apps_delete', methods: ['GET'])]
     public function deleteApps(Request $request, Apps $app, AppsRepository $appsRepository): Response
     {
-        dd($request);
-       
+        // dd($request);
+
         return $this->redirectToRoute('app_apps_index', [], Response::HTTP_SEE_OTHER);
     }
 }

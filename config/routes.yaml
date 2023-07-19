@@ -23,3 +23,11 @@ app_delete:
     path: /delete/{id}
     controller: App\Controller\AdminController::delete
     methods: GET
+app_role:
+    path: /getRole
+    controller: App\Controller\SecurityController::role
+    methods: GET
+# app_card:
+#     path: /Application/{id}
+#     controller: App\Controller\UseController::listeCard
+#     methods: GET

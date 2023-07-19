@@ -42,15 +42,15 @@ class AppsRepository extends ServiceEntityRepository
    /**
     * @return Apps[] Returns an array of Apps objects
     */
-   public function findByRole($value): array
-   {
-       return $this->createQueryBuilder('a')
-           ->andWhere('a.role  = :val')
-           ->setParameter('val', $value)
-           ->getQuery()
-           ->getResult()
-       ;
-   }
+//    public function findByRole($value): array
+//    {
+//        return $this->createQueryBuilder('a')
+//            ->andWhere('a.role  = :val')
+//            ->setParameter('val', $value)
+//            ->getQuery()
+//            ->getResult()
+//        ;
+//    }
 
 //    public function findOneBySomeField($value): ?Apps
 //    {
@@ -61,4 +61,25 @@ class AppsRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function findUrl($value):?string
+    {
+        return $this->createQueryBuilder('a')
+           ->andWhere('a.url = :val')
+           ->setParameter('val', $value)
+           ->getQuery()
+           ->getOneOrNullResult() 
+        ;
+    }
+    public function findByClient(array $clientIds):array
+    {
+        return $this->createQueryBuilder('a')
+           ->andWhere('a.client IN (:clients)')
+           ->setParameter('clients', $clientIds)
+           ->getQuery()
+           ->getResult()
+        ;
+    }
+    
+
 }

@@ -6,23 +6,26 @@ use App\Repository\AppsRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 #[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: AppsRepository::class)]
+#[UniqueEntity('nom')]
 class Apps
 {
     private $update;
-    
+
     public function __construct()
     {
-        $this->update= new \DateTimeImmutable();
+        $this->update = new \DateTimeImmutable();
     }
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
@@ -34,8 +37,8 @@ class Apps
     #[ORM\Column(length: 255)]
     private ?string $client = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $role = null;
+    // #[ORM\Column(length: 255)]
+    // private ?string $role = null;
 
     #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'imageName')]
     private ?File $imageFile = null;
@@ -96,17 +99,17 @@ class Apps
         return $this;
     }
 
-    public function getRole(): ?string
-    {
-        return $this->role;
-    }
+    // public function getRole(): ?string
+    // {
+    //     return $this->role;
+    // }
 
-    public function setRole(string $role): static
-    {
-        $this->role = $role;
+    // public function setRole(string $role): static
+    // {
+    //     $this->role = $role;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function setImageFile(?File $imageFile = null): void
     {

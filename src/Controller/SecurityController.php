@@ -14,12 +14,15 @@ use Symfony\Component\Routing\Annotation\Route;
 use  Stevenmaguire\OAuth2\Client\Provider\Keycloak;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\AccessMap;
+use Symfony\Component\HttpClient\HttpClient;
+
 
 
 // use Nowakowskir\JWT\JWT;
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use Symfony\Component\HttpClient\DependencyInjection\HttpClientPass;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -71,19 +74,46 @@ class SecurityController extends AbstractController
     {
     }
 
-    #[Route(path: '/Deconnection', name: 'app_log')]
+    #[Route(path: '/logout', name: 'app_log')]
     public function log(Request $request): Response
-     {
+    {
         $session = $request->getSession();
-            // dd($session->get('accessToken'));     
+        // dd($session->get('accessToken'));     
 
         return  $this->redirect($this->provider->getLogoutUrl([
             "redirect_uri" => $_ENV['KEYCLOAK_LOGOUT'],
             "access_token" =>  $session->get('accessToken')
         ]));
-
-
-        
     }
 
+    #[Route(path: '/getRole', name: 'app_role')]
+    public function role(Request $request): Response
+    {
+        // $queryParams = [
+        //     'access_token' => 'votre_jetontoken',
+        // ];
+        $session = $request->getSession();
+      
+        //  dd($session->get('accessToken')['id_token']);
+        $client = HttpClient::createForBaseUri('http://localhost:8080/admin/master/console/#/dev/clients',[
+            'auth_bearer' =>  $session->get('accessToken')['id_token'],
+        ]);
+        $response = $client->request('GET', 'http://localhost:8080/admin/master/console/#/dev/clients/one-portal/roles', [
+            
+            'auth_bearer' =>  $session->get('accessToken')['id_token'],
+            
+            // ...
+        ]);
+        //  dd($response);
+       
+        // $response = $client->request(
+        //     'GET',
+        //     'http://localhost:8080/auth/admin/realms/dev/clients/one-portal/roles',
+        //     [
+
+        //         'auth_bearer' => $session->get('accessToken')['id_token'],
+        //     ]
+        // );
+        // dd($response);
+    }
 }

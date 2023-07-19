@@ -1,5 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			{% block title %}One-Portal
+			{% endblock %}
+		</title>
 
-<div class="example-wrapper">
-   
-    <a href="{{ path('app_keycloak_login')}}">se connecter</a>
-</div>
+		<link
+		rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+		{# <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.7.0/flowbite.min.css" rel="stylesheet"/> #}
+		<script src="https://cdn.tailwindcss.com"></script>
+
+	</head>
+	<body>
+		<main class="flex w-full text-white justify-center h-screen items-center border">
+			<div class="border rounded-md flex bg-[#145787] flex-col py-20 items-center w-5/12">
+				<h1 class="font-semibold place-items-center">BIENVENUE SUR ONE-PORTAL</h1>
+
+				<a class="mt-5 inline-block w-9/12" href="{{ path('app_keycloak_login')}}">
+					<div class="flex justify-center border rounded-md w-full px-3 relative">
+						<img
+						class="h-8 absolute left-2 rounded top-2" src="{{asset('celtiis logo/Celtiis-le-3eme-operateur-Gsm-a-demarree-ses-activites-au-Benin.jpeg')}}" alt=""/>
+						{# <div class="">
+												</div> #}
+						<p class="font-semibold my-3 text-white">Se connecter</p>
+					</div>
+				</a>
+
+			</div>
+		</main>
+
+
+	</body>
+</html>

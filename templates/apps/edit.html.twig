@@ -1,19 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Apps{% endblock %}
+{% block title %}Editer une Application
+{% endblock %}
 
 
 {% block body %}
 
-	<div class="">
-		
-		<div>
-			{{ include('apps/_form.html.twig', {'button_label': 'Update'}) }}
-		</div>
-		<div>
-			
-		</div>
-	</div>
+	
+
+	{{ include('apps/_form.html.twig', {'button_label': 'Update'}) }} 
 
 
 	{# {{ include('apps/_delete_form.html.twig') }} #}

@@ -16,15 +16,19 @@ use  App\Form\RegisterAppsType;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use App\Repository\AppsRepository;
+use App\Service\KeycloakHttpRequest;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Security;
 
 #[IsGranted('ROLE_ADMIN')]
 class AdminController extends AbstractController
 {
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
-    {
+    public function __construct(
+        private UrlGeneratorInterface $urlGenerator,
+        private KeycloakHttpRequest $keycloakHttpRequest
+    ) {
     }
 
     #[Route('/admin', name: 'app_admin')]
@@ -35,12 +39,12 @@ class AdminController extends AbstractController
         ]);
     }
 
-     /**
+    /**
      *
-      * @Route("/admin/register")
+     * @Route("/admin/register")
      */
-   
-    public function register(ManagerRegistry $manager,Request $request): Response
+
+    public function register(ManagerRegistry $manager, Request $request): Response
     {
         // creates a apps object and initializes some data for this example
         $entity = $manager->getManager();
@@ -51,29 +55,27 @@ class AdminController extends AbstractController
             // $form->getData() holds the submitted values
             // but, the original `$task` variable has also been updated
             $apps = $form->getData();
-          
+
             $entity = $manager->getManager();
             $entity->persist($apps);
             $entity->flush();
-             return $this->redirectToRoute('app_liste');
-        }else {
+            return $this->redirectToRoute('app_liste');
+        } else {
             return $this->render('admin/register.html.twig', [
                 'form' => $form->createView()
-                
+
             ]);
         }
-
-        
     }
 
-   /**
+    /**
      *
-      * @Route("/liste")
+     * @Route("/liste")
      */
     public function AllApps(AppsRepository $AppsRepository): Response
     {
         $Apps = $AppsRepository
-        ->findAll();
+            ->findAll();
 
         return $this->render('admin/liste.html.twig', [
             'Apps' => $Apps
@@ -81,13 +83,13 @@ class AdminController extends AbstractController
     }
 
     #[Route('/edit/{id}', name: 'app_edit')]
-    public function edit(AppsRepository $AppsRepository,$id,Request $request,ManagerRegistry $manager): Response
+    public function edit(AppsRepository $AppsRepository, $id, Request $request, ManagerRegistry $manager): Response
     {
         $apps = $AppsRepository->find($id);
-            dd($apps);
-        if (!$apps ) {
+        // dd($apps);
+        if (!$apps) {
             throw $this->createNotFoundException(
-                'No Apps found for id '.$id
+                'No Apps found for id ' . $id
             );
         }
 
@@ -97,13 +99,13 @@ class AdminController extends AbstractController
     }
 
     #[Route('/delete/{id}', name: 'app_delete')]
-    public function delete(AppsRepository $AppsRepository,$id,ManagerRegistry $manager): Response
-    {   
-        $em =$manager->getManager();;
+    public function delete(AppsRepository $AppsRepository, $id, ManagerRegistry $manager): Response
+    {
+        $em = $manager->getManager();;
         $apps = $AppsRepository->find($id);
-        if (!$apps ) {
+        if (!$apps) {
             throw $this->createNotFoundException(
-                'No Apps found for id '.$id
+                'No Apps found for id ' . $id
             );
         }
 
@@ -111,8 +113,59 @@ class AdminController extends AbstractController
         $em->flush();
 
         return new RedirectResponse($this->urlGenerator->generate('app_apps_index'));
+    }
+    #[Route('/Applications', name: 'app_card')]
+    public function listeCard(
+        Security $security, 
+        Request $request, 
+        AppsRepository $appsRepository,
+        // $id
 
-  
+    ): Response
+    {
+        $session = $request->getSession();
+        
+        $userClient =$this->keycloakHttpRequest->getAllUserClient($this->keycloakHttpRequest->getToken(), $session->get('accessToken')['id_token']);
+        $clients = [];
+
+        foreach (json_decode(json_encode($userClient))->clientMappings as  $clientName) {
+            $clients[] = $clientName->client;
+        }
+        // $application = $appsRepository->find($id);   
+
+        $apps= $appsRepository->findByClient($clients);
+         return $this->render('admin/card.html.twig', [
+            'controller_name' => 'UseController',
+            'apps' => $apps,
+            // 'application'=> $application,
+
+        ]);
     }
 
+    #[Route('/{id}/detail', name: 'app_details')]
+    public function details(Security $security,AppsRepository $appsRepository,$id): Response
+    {     
+
+        // dd($id);
+        $application = $appsRepository->find($id);   
+        //  dd($application);
+        // $app=json_decode(json_encode($application));
+        // dd($app);
+        //  return $this->redirectToRoute('app_card');
+        return $this->render('admin/details.html.twig', [
+            'controller_name' => 'UseController',
+            'application'=> $application,
+        ]);
+    }
+
+    #[Route('/{id}/visite', name: 'app_visites')]
+    public function visite(Security $security, Apps $app, AppsRepository $appsRepository, $id): Response
+    {
+
+        $apps = $appsRepository->findUrl($id);  
+
+        return $this->redirect($app->getUrl());
+    }
+
+   
 }

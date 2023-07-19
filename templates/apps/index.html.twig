@@ -1,27 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Apps index
+{% block title %}Application
 {% endblock %}
 
 {% block body %}
 
 	<div class="w-11/12 mx-auto">
 
-		<h1 class="mt-5  font-bold text-xl mb-5 ">Apps index</h1>
+		<h1 class="mt-5  font-bold text-xl mb-5 ">Liste des Applications</h1>
 
 		<div class="flex flex-col mb-5">
 			<div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
 				<div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
 					<div class="overflow-hidden">
 						<table class="min-w-full text-left text-sm font-light">
-							<thead class="border-b font-medium dark:border-neutral-500 bg-[#1c3b72] text-white ">
+							<thead class="border-b font-medium dark:border-neutral-500 bg-[#145787] text-white ">
 								<tr>
 									<th scope="col" class="px-6 font-semibold py-4">ID</th>
 									<th scope="col" class="px-6 py-4">NOM</th>
 									<th scope="col" class="px-6 py-4">URL</th>
 									<th scope="col" class="px-6 py-4">DESCRIPTION</th>
-									<th scope="col" class="px-6 py-4">CLIENT</th>
-									<th scope="col" class="px-6 py-4">ACTION</th>
+									{# <th scope="col" class="px-6 py-4">CLIENT</th> #}
+									<th scope="col" class="px-6 py-4">ClIENT</th>
 									<th scope="col" class="px-6 py-4">IMAGE</th>
 									<th scope="col" class="px-6 py-4">ACTION</th>
 
@@ -29,12 +29,6 @@
 								</tr>
 							</thead>
 							<tbody>
-								{# <tr class="border-b dark:border-neutral-500">
-																<td class="whitespace-nowrap px-6 py-4 font-medium">1</td>
-																<td class="whitespace-nowrap px-6 py-4">Mark</td>
-																<td class="whitespace-nowrap px-6 py-4">Otto</td>
-																<td class="whitespace-nowrap px-6 py-4">@mdo</td>
-															</tr> #}
 								{% for app in apps %}
 									<tr class="border-b dark:border-neutral-500">
 										<td class="whitespace-nowrap px-6 py-4">{{ app.id }}</td>
@@ -42,8 +36,8 @@
 										<td class="whitespace-nowrap px-6 py-4">{{ app.url }}</td>
 										<td class="whitespace-nowrap px-6 py-4">{{ app.description }}</td>
 										<td class="whitespace-nowrap px-6 py-4">{{ app.client }}</td>
-										<td class="whitespace-nowrap px-6 py-4">{{ app.role }}</td>
-										<td class="whitespace-nowrap px-6 py-4"><div class="circle mr-3  "><img class="h-10 w-20"  src="{{vich_uploader_asset(app, 'imageFile')}}" /></div></td>
+										{# <td class="whitespace-nowrap px-6 py-4">{{ app.role }}</td> #}
+										<td class="whitespace-nowrap px-6 py-4"><div class="circle mr-3  "><img class="h-10 w-20 "  src="{{vich_uploader_asset(app, 'imageFile')}}" /></div></td>
 										<td class="text-indigo-500 ">
 											<a class="rounded-full border px-4 font-semibold bg-[#93c01d] py-1 text-white" href="{{ path('app_apps_edit', {'id': app.id}) }}">edit</a>
 											<a class="rounded-full border px-4 font-semibold bg-[#93c01d] py-1 text-white" href="{{ path('app_delete', {'id': app.id}) }}">delete</a>
