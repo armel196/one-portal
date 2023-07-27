@@ -10,7 +10,7 @@
 		<div class="wrapper grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-5">
 			{% for app in apps %}
 
-				<div class="card p-4 bg-[#145787] text-white rounded-lg">
+				<div class="card p-4 border-2 border-blue-600 bg-white text-black rounded-lg">
 
 					<div class="flex flex-col items-center">
 
@@ -34,9 +34,9 @@
 					</div>
 
 					<div class="buttonLink flex justify-between py-2">
-						<a href="{{path('app_detail', {'id': app.id})}}"  class="block text-white green_Button rounded-full  bg-[#93c01d] px-6 py-2  hover:bg-[#729716]" >Details</a>
+						<a href="{{path('app_detail', {'id': app.id})}}"  class="block text-white green_Button rounded-full  bg-[#145787] px-6 py-2" >Details</a>
 
-						<a href="{{path('app_visite', {'id': app.id})}}" class="green_Button rounded-full  bg-[#93c01d] px-6 py-2  hover:bg-[#729716]">Visiter</a>
+						<a href="{{path('app_visite', {'id': app.id})}}" class="green_Button rounded-full  text-white  bg-[#145787] px-6 py-2">Visiter</a>
 
 					</div>
 

@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Apps;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+
 
 /**
  * @extends ServiceEntityRepository<Apps>
@@ -80,6 +82,19 @@ class AppsRepository extends ServiceEntityRepository
            ->getResult()
         ;
     }
-    
+    public const PAGINATOR_PER_PAGE = 2;
 
+    public function getCommentPaginator(Apps $apps, int $offset): Paginator
+    {
+        $query = $this->createQueryBuilder('c')
+            ->andWhere('c.apps = :apps')
+            ->setParameter('apps', $apps)
+            ->orderBy('c.createdAt', 'ASC')
+            ->setMaxResults(self::PAGINATOR_PER_PAGE)
+            ->setFirstResult($offset)
+            ->getQuery()
+        ;
+
+        return new Paginator($query);
+    }
 }

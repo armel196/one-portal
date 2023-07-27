@@ -5,15 +5,18 @@
 
 {% block body %}
 
-	<div class="w-11/12 mx-auto">
+	<div class="w-11/12 mx-auto mt-5">
 
-		<h1 class="mt-5  font-bold text-xl mb-5 ">Liste des Applications</h1>
+		<div class="flex justify-between">
+			<h1 class="mt-5 font-bold text-xl mb-5 ">Liste des Applications</h1>
+			<a class="rounded-full border px-5 h-10 pt-2 mt-10 font-semibold bg-[#93c01d] text-white" href="{{ path('app_apps_new') }}">Ajouter</a>
+		</div>
 
 		<div class="flex flex-col mb-5">
 			<div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
 				<div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
 					<div class="overflow-hidden">
-						<table class="min-w-full text-left text-sm font-light">
+						<table class="min-w-full text-left text-sm font-light border dark:border-neutral-500">
 							<thead class="border-b font-medium dark:border-neutral-500 bg-[#145787] text-white ">
 								<tr>
 									<th scope="col" class="px-6 font-semibold py-4">ID</th>
@@ -37,10 +40,12 @@
 										<td class="whitespace-nowrap px-6 py-4">{{ app.description }}</td>
 										<td class="whitespace-nowrap px-6 py-4">{{ app.client }}</td>
 										{# <td class="whitespace-nowrap px-6 py-4">{{ app.role }}</td> #}
-										<td class="whitespace-nowrap px-6 py-4"><div class="circle mr-3  "><img class="h-10 w-20 "  src="{{vich_uploader_asset(app, 'imageFile')}}" /></div></td>
+										<td class="whitespace-nowrap px-6 py-4">
+											<div class="circle mr-3  "><img class="h-10 w-20 " src="{{vich_uploader_asset(app, 'imageFile')}}"/></div>
+										</td>
 										<td class="text-indigo-500 ">
-											<a class="rounded-full border px-4 font-semibold bg-[#93c01d] py-1 text-white" href="{{ path('app_apps_edit', {'id': app.id}) }}">edit</a>
-											<a class="rounded-full border px-4 font-semibold bg-[#93c01d] py-1 text-white" href="{{ path('app_delete', {'id': app.id}) }}">delete</a>
+											<a class="rounded-full border px-4 font-semibold bg-[#93c01d] py-1 text-white" href="{{ path('app_apps_edit', {'id': app.id}) }}">Modifier</a>
+											<a class="rounded-full border px-4 font-semibold bg-[#93c01d] py-1 text-white" href="{{ path('app_delete', {'id': app.id}) }}">Supprimer</a>
 										</td>
 									</tr>
 								{% else %}
@@ -55,7 +60,15 @@
 				</div>
 			</div>
 		</div>
+		<div>
+			{% if previous >= 0 %}
+				<a href="{{ path('apps', { id: apps.id, offset: previous }) }}">Previous</a>
+			{% endif %}
+			{% if next < comments|length %}
+				<a href="{{ path('apps', { id: apps.id, offset: next }) }}">Next</a>
+			{% endif %}
+			{# {{ knp_pagination_render(pagination) }} #}
+		</div>
 
-		<a class="rounded-full border px-7  py-2 font-semibold  bg-[#93c01d] text-white" href="{{ path('app_apps_new') }}">Create new</a>
 	</div>
 {% endblock %}

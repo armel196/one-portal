@@ -5,42 +5,29 @@
 
 {% block body %}
 
-	<main class="w-full text-black h-[90vh] flex justify-center items-center ">
-
-
-		<div class="flex justify-center ">
-
-
-			<div class="card p-4 bg-[#145787]  w-96  text-white rounded-lg">
-
-				<div class="flex flex-col  items-left">
-                    
-					<div class="w-full h-36">
-						<img src="{{vich_uploader_asset(application, 'imageFile')}}" style="object-fit: cover;" class="w-full h-full"/>
-
-					</div>
-
-					<div class="UserInfo text-left mt-5 ">
-						<b> Nom:</b> 
-						<h5 class=" text-lg font-bold mb-3">
-						{{ application.nom}}
-						</h5>
-					</div>
-
-				</div>
-
-				<div class="descript my-2 mb-5">
-					<b>Description:</b>
-					<p class="text-light font-bold  text-ellipsis overflow-hidden Text_Description text-md">
-						{{ application.description}}
-					</p>
-
-				</div>
-
-			</div>
-
-
+	<main class="w-full text-black h-[90vh] flex flex-col items-center py-5">
+		<div class="my-3 w-5/12">
+			<a class="inline-block px-5 py-2 border text-white bg-[#145787] rounded " href="{{ path('app_details') }}">Retour</a>
 		</div>
+		<div class="card w-5/12 border-2 shadow-xl border-blue-600 rounded p-2 md:p-9 h-fit">
+			<div class="rounded w-full border">
+				<img class="w-full h-full " src="{{vich_uploader_asset(application, 'imageFile','App\\Entity\\Apps')}}" style="object-fit: cover;" class="w-full h-full"/>
+			</div>
+			<div class="mt-5 flex flex-col items-center">
+
+				<h5 class="md:text-lg font-bold">
+					{{ application.nom}}
+				</h5>
+
+				<p class="text-light font-bold  text-ellipsis overflow-hidden Text_Description text-md mt-8">
+					{{ application.description}}
+				</p>
+			</div>
+		</div>
+
+		{# <div class="mt-5 space-x-2 flex justify-center">
+				</div> #}
 	</main>
+
 
 {% endblock %}

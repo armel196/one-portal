@@ -13,7 +13,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-
+use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Twig\Environment;
 
 
 #[IsGranted('ROLE_ADMIN')]
@@ -21,10 +23,28 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class AppsController extends AbstractController
 {
     #[Route('/', name: 'app_apps_index', methods: ['GET'])]
-    public function index(AppsRepository $appsRepository): Response
-    {
+    public function index(
+        Environment $twig,
+        Apps $apps,
+        AppsRepository $appsRepository,
+        PaginatorInterface $paginator,
+        Request $request
+    ): Response {
+
+        $offset = max(0, $request->query->getInt('offset', 0));
++       $paginator = $appsRepository->getCommentPaginator($apps, $offset);
+        // $pagination = $paginator->paginate(
+        //     $appsRepository->findAll(),
+        //     $request->query->getInt('page', 1), 
+        //     5
+        // );
+        
         return $this->render('apps/index.html.twig', [
             'apps' => $appsRepository->findAll(),
+            // 'pagination' => $pagination
+            'comments' => $paginator,
+            'previous' => $offset - AppsRepository::PAGINATOR_PER_PAGE,
+           'next' => min(count($paginator), $offset + AppsRepository::PAGINATOR_PER_PAGE),
         ]);
     }
 
@@ -47,7 +67,7 @@ class AppsController extends AbstractController
         return $this->renderForm('apps/new.html.twig', [
             'app' => $app,
             'form' => $form,
-            'client'=>$client
+            'client' => $client
         ]);
     }
 

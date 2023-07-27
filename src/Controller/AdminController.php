@@ -116,16 +116,15 @@ class AdminController extends AbstractController
     }
     #[Route('/Applications', name: 'app_card')]
     public function listeCard(
-        Security $security, 
-        Request $request, 
+        Security $security,
+        Request $request,
         AppsRepository $appsRepository,
         // $id
 
-    ): Response
-    {
+    ): Response {
         $session = $request->getSession();
-        
-        $userClient =$this->keycloakHttpRequest->getAllUserClient($this->keycloakHttpRequest->getToken(), $session->get('accessToken')['id_token']);
+
+        $userClient = $this->keycloakHttpRequest->getAllUserClient($this->keycloakHttpRequest->getToken(), $session->get('accessToken')['id_token']);
         $clients = [];
 
         foreach (json_decode(json_encode($userClient))->clientMappings as  $clientName) {
@@ -133,8 +132,8 @@ class AdminController extends AbstractController
         }
         // $application = $appsRepository->find($id);   
 
-        $apps= $appsRepository->findByClient($clients);
-         return $this->render('admin/card.html.twig', [
+        $apps = $appsRepository->findByClient($clients);
+        return $this->render('admin/card.html.twig', [
             'controller_name' => 'UseController',
             'apps' => $apps,
             // 'application'=> $application,
@@ -143,29 +142,28 @@ class AdminController extends AbstractController
     }
 
     #[Route('/{id}/detail', name: 'app_details')]
-    public function details(Security $security,AppsRepository $appsRepository,$id): Response
-    {     
+    public function details(Security $security, AppsRepository $appsRepository, $id): Response
+    {
 
         // dd($id);
-        $application = $appsRepository->find($id);   
+        $application = $appsRepository->find($id);
         //  dd($application);
         // $app=json_decode(json_encode($application));
         // dd($app);
         //  return $this->redirectToRoute('app_card');
         return $this->render('admin/details.html.twig', [
             'controller_name' => 'UseController',
-            'application'=> $application,
+            'application' => $application,
         ]);
     }
 
     #[Route('/{id}/visite', name: 'app_visites')]
     public function visite(Security $security, Apps $app, AppsRepository $appsRepository, $id): Response
     {
-
-        $apps = $appsRepository->findUrl($id);  
-
-        return $this->redirect($app->getUrl());
+        $apps =$app->getUrl();
+        // $apps ="http://google.com";
+        $response = new Response('Hello world!', 302);
+        $response->headers->set('Location', $apps );
+        return $response;
     }
-
-   
 }
