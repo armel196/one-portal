@@ -38,7 +38,7 @@ services:
         networks:
             - symfony_app
         env_file:
-            - .env.nginx.local
+            - .env.nginx
 
 volumes:
     symfony_app_var:
