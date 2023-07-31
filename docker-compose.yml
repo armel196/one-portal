@@ -1,0 +1,84 @@
+# version: "3"
+
+# services:
+#     db:
+#         image: mysql:8.0.33
+#         platform: linux/x86_64
+#         command: --default-authentication-plugin=mysql_native_password
+#         volumes:
+#             - "db_app:/var/lib/mysql"
+#         environment:
+#             MYSQL_DATABASE: ${MYSQL_DATABASE}
+#             MYSQL_USER: ${MYSQL_USER}
+#             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+#         ports:
+#             - 3306:3306
+#         networks:
+#             - symfony_app
+#     php:
+#         build:
+#             context: ./php
+#             args:
+#                 TIMEZONE: ${TIMEZONE}
+#         volumes:
+#             - ../:/var/www/symfony:cached
+#             - symfony_app_var:/var/www/symfony/var
+#             - symfony_app_vendor:/var/www/symfony/vendor
+#         networks:
+#             - symfony_app
+#     nginx:
+#         build:
+#             context: ./nginx
+#         volumes:
+#             - ../:/var/www/symfony:cached
+#             - symfony_app_var:/var/www/symfony/var
+#             - symfony_app_vendor:/var/www/symfony/vendor
+#         ports:
+#             - :80
+#         networks:
+#             - symfony_app
+#         env_file:
+#             - .env.nginx
+
+# volumes:
+#     symfony_app_var:
+#     symfony_app_vendor:
+#     db_app:
+
+# networks:
+#     symfony_app:
+
+version: "3.7"
+services:
+    nginx:
+        build:
+            context: ./docker
+            dockerfile: Dockerfile-nginx
+        volumes:
+            - ./:/var/www/project/:cached
+        ports:
+            - 85:85 # Ports that are exposed, you can connect to port 8001 to port 80 of the container.
+        networks:
+            - symfony
+    fpm:
+        build: # Info to build the Docker image
+            context: ./docker # Specify where the Dockerfile is located (e.g. in the root directory of the project)
+            dockerfile: Dockerfile-php # Specify the name of the Dockerfile
+        environment: # You can use this section to set environment variables. But you can also use the .env file.
+        - DATABASE_URL=mysql://root:root@db/docker_sf
+        volumes:
+        - ./:/var/www/project/:cached # Location of the project for php-fpm. Note this should be the same for NGINX.*
+        networks:
+        - symfony # Docker containers (services) that need to connect to each other should be on the same network.
+    db: #address
+        image: mariadb:latest
+        ports:
+        - "3317:3306" #outside:inside docker container from-within
+        environment:
+        - MYSQL_DATABASE=docker_sf
+        - MYSQL_ROOT_PASSWORD=root
+        volumes:
+        - persistent:/var/lib/mysql
+        - ./docker/build/db/:/docker-entrypoint-initdb.d/
+        networks:
+        - symfony
