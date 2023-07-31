@@ -50,9 +50,9 @@
 
 version: '3.8'
 services:
-    php:
+    php-fpm:
         build:
-            context: ./php
+            context: ./php-fpm
         volumes:
         - ../symfony:/var/www/symfony
     nginx:
@@ -64,7 +64,7 @@ services:
             - ./nginx/sites/:/etc/nginx/sites-available
             - ./nginx/conf.d/:/etc/nginx/conf.d
         depends_on:
-            - php
+            - php-fpm
         ports:
             - "80:80"
             - "443:443"
