@@ -60,15 +60,15 @@
 				</div>
 			</div>
 		</div>
-		<div>
+		{# <div>
 			{% if previous >= 0 %}
 				<a href="{{ path('apps', { id: apps.id, offset: previous }) }}">Previous</a>
 			{% endif %}
 			{% if next < comments|length %}
 				<a href="{{ path('apps', { id: apps.id, offset: next }) }}">Next</a>
-			{% endif %}
+			{% endif %} #}
 			{# {{ knp_pagination_render(pagination) }} #}
-		</div>
+		{# </div> #}
 
 	</div>
 {% endblock %}

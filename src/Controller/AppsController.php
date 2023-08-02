@@ -25,14 +25,13 @@ class AppsController extends AbstractController
     #[Route('/', name: 'app_apps_index', methods: ['GET'])]
     public function index(
         Environment $twig,
-        Apps $apps,
         AppsRepository $appsRepository,
         PaginatorInterface $paginator,
         Request $request
     ): Response {
 
-        $offset = max(0, $request->query->getInt('offset', 0));
-+       $paginator = $appsRepository->getCommentPaginator($apps, $offset);
+        // $offset = max(0, $request->query->getInt('offset', 0));
+        // +       $paginator = $appsRepository->getCommentPaginator($apps, $offset);
         // $pagination = $paginator->paginate(
         //     $appsRepository->findAll(),
         //     $request->query->getInt('page', 1), 
@@ -42,9 +41,9 @@ class AppsController extends AbstractController
         return $this->render('apps/index.html.twig', [
             'apps' => $appsRepository->findAll(),
             // 'pagination' => $pagination
-            'comments' => $paginator,
-            'previous' => $offset - AppsRepository::PAGINATOR_PER_PAGE,
-           'next' => min(count($paginator), $offset + AppsRepository::PAGINATOR_PER_PAGE),
+        //     'comments' => $paginator,
+        //     'previous' => $offset - AppsRepository::PAGINATOR_PER_PAGE,
+        //    'next' => min(count($paginator), $offset + AppsRepository::PAGINATOR_PER_PAGE),
         ]);
     }
 
