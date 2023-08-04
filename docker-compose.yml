@@ -1,141 +1,85 @@
-# version: "3"
-
-# services:
-#     db:
-#         image: mysql:8.0.33
-#         platform: linux/x86_64
-#         command: --default-authentication-plugin=mysql_native_password
-#         volumes:
-#             - "db_app:/var/lib/mysql"
-#         environment:
-#             MYSQL_DATABASE: ${MYSQL_DATABASE}
-#             MYSQL_USER: ${MYSQL_USER}
-#             MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-#         ports:
-#             - 3306:3306
-#         networks:
-#             - symfony_app
-#     php:
-#         build:
-#             context: ./php
-#             args:
-#                 TIMEZONE: ${TIMEZONE}
-#         volumes:
-#             - ../:/var/www/symfony:cached
-#             - symfony_app_var:/var/www/symfony/var
-#             - symfony_app_vendor:/var/www/symfony/vendor
-#         networks:
-#             - symfony_app
-#     nginx:
-#         build:
-#             context: ./nginx
-#         volumes:
-#             - ../:/var/www/symfony:cached
-#             - symfony_app_var:/var/www/symfony/var
-#             - symfony_app_vendor:/var/www/symfony/vendor
-#         ports:
-#             - :80
-#         networks:
-#             - symfony_app
-#         env_file:
-#             - .env.nginx
-
-# volumes:
-#     symfony_app_var:
-#     symfony_app_vendor:
-#     db_app:
-
-# networks:
-#     symfony_app:
-
 version: '3.8'
 services:
-    php:
-        image: php:8.2-fpm
-        volumes:
-        - /home/dede/mes_projets/my_project/public
-        networks:
-         - mon_app_net
     nginx:
-        image: nginx:1.25.1
+        container_name: nginx
+        build:
+            context: ./.docker/nginx
         volumes:
-          - docker volume create nginx_volume
+            - ./:/var/www/symfony:cached
+            - symfony_app_var:/var/www/symfony/var
+            - symfony_app_vendor:/var/www/symfony/vendor
         ports:
-            - ${NGINX_PORT}:8000
+            - ${NGINX_PORT:-8092}:80
         depends_on:
-         - php
-        environment:
-         - NGINX_HOST=${NGINX_HOST}
-         - NGINX_PORT=${NGINX_PORT}
-    db:
-        image: mariadb:10.6.14
+            - oneportal
+        env_file:
+            - .env.nginx
+        networks:
+            - mon_app_net
+        # environment:
+        #     - NGINX_HOST=${NGINX_HOST}
+        #     - NGINX_PORT=${NGINX_PORT:-8092}
+    database:
+        container_name: database
+        image: mariadb:10.11.4
         volumes:
-        - docker volume create db_volume
-        - docker run -d --name db -v db_volume:/var/lib/mysql  mariadb        
+            - ./docker/mariadb:/var/lib/mariadb        
         restart: always
         environment:
-            MARIADB_ROOT_PASSWORD: example
-            MARIADB_DATABASE: app2
-            MARIADB_USER: admin
-            MARIADB_PASSWORD_HASH: password
-    adminer:
-        image: adminer
-        restart: always
+            MARIADB_DATABASE: ${MARIADB_DATABASE}
+            MARIADB_USER: ${MARIADB_USER}
+            MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+            MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
         ports:
-            - 8080:8080
+            - ${MARIADB_PORT:-3306}:3306
+        networks:
+            - mon_app_net
     keycloak:
+        container_name: keycloak
         image: quay.io/keycloak/keycloak:22.0.1
         restart: always
         environment:
            KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
            KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
         ports:
-        - ${KEYCLOACK_PORT:-8080}:8080
+            - ${KEYCLOACK_PORT:-8090}:8080
         networks:
-        - mon_app_net  
+            - mon_app_net
+        command: start-dev
+    # oneportal:
+    #     container_name: one_portal
+    #     build:
+    #         context: ./
+    #         dockerfile: Dockerfile
+    #     image: app_one_portal
+    #     depends_on:
+    #         - db
+    #     ports:
+    #       - ${APP_PORT:-3000}:3000
+    #     networks:
+    #         - mon_app_net
     oneportal:
-        container_name: one_portal
+        container_name: oneportal
         build:
             context: ./
             dockerfile: Dockerfile
-        image: app_one_portal
+            args:
+                TIMEZONE: ${TIMEZONE}
+        depends_on:
+            - database
+            
+        volumes:
+            - ./:/var/www/symfony:cached
+            - symfony_app_var:/var/www/symfony/var
+            - symfony_app_vendor:/var/www/symfony/vendor
         ports:
           - ${APP_PORT:-3000}:3000
+        networks:
+            - mon_app_net
+volumes:
+    symfony_app_var:
+    symfony_app_vendor:
+    db_app:
 networks:
     mon_app_net:
      driver: bridge
-
-# version: "3.7"
-# services:
-    # nginx:
-    #     build:
-    #         context: ./docker
-    #         dockerfile: Dockerfile-nginx
-    #     volumes:
-    #         - ./:/var/www/project/:cached
-    #     ports:
-    #         - 85:85 # Ports that are exposed, you can connect to port 8001 to port 80 of the container.
-    #     networks:
-    #         - symfony
-    # fpm:
-    #     build: # Info to build the Docker image
-    #         context: ./docker # Specify where the Dockerfile is located (e.g. in the root directory of the project)
-    #         dockerfile: Dockerfile-php # Specify the name of the Dockerfile
-    #     environment: # You can use this section to set environment variables. But you can also use the .env file.
-    #     - DATABASE_URL=mysql://root:root@db/docker_sf
-    #     volumes:
-    #     - ./:/var/www/project/:cached # Location of the project for php-fpm. Note this should be the same for NGINX.*
-    #     networks:
-    #     - symfony # Docker containers (services) that need to connect to each other should be on the same network.
-    # db: #address
-    #     image: mariadb:latest
-    #     ports:
-    #     - "3317:3306" #outside:inside docker container from-within
-    #     environment:
-    #     - MYSQL_DATABASE=docker_sf
-    #     - MYSQL_ROOT_PASSWORD=root
-    #     volumes:
-    #     - persistent:/var/lib/mysql
-    #     - ./docker/build/db/:/docker-entrypoint-initdb.d/
-    #     networks:
-    #     - symfony
