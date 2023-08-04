@@ -57,47 +57,50 @@ services:
         networks:
          - mon_app_net
     nginx:
-        image: nginx:latest
+        image: nginx:1.25.1
         volumes:
           - docker volume create nginx_volume
-          -
         ports:
-            - "8000:80"
+            - ${NGINX_PORT}:8000
         depends_on:
-         - mon_app_php 
-        networks:
-        - mon_app_net
+         - php
         environment:
-         - NGINX_HOST=one-portal.com
-         - NGINX_PORT=8000
+         - NGINX_HOST=${NGINX_HOST}
+         - NGINX_PORT=${NGINX_PORT}
     db:
-        image: mariadb
+        image: mariadb:10.6.14
         volumes:
         - docker volume create db_volume
-        - docker run -d --name db -v db_volume:/var/lib/mysql  mariadb
-        
+        - docker run -d --name db -v db_volume:/var/lib/mysql  mariadb        
         restart: always
         environment:
             MARIADB_ROOT_PASSWORD: example
             MARIADB_DATABASE: app2
-            MARIADB_USER: 
-            MARIADB_PASSWORD_HASH:
+            MARIADB_USER: admin
+            MARIADB_PASSWORD_HASH: password
     adminer:
         image: adminer
         restart: always
         ports:
             - 8080:8080
     keycloak:
-        image: jboss/keycloak:latest
+        image: quay.io/keycloak/keycloak:22.0.1
         restart: always
         environment:
-           KEYCLOAK_USER: admin 
-           KEYCLOAK_PASSWORD: admin
+           KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
+           KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
         ports:
-        - "8080:8080"
+        - ${KEYCLOACK_PORT:-8080}:8080
         networks:
         - mon_app_net  
-
+    oneportal:
+        container_name: one_portal
+        build:
+            context: ./
+            dockerfile: Dockerfile
+        image: app_one_portal
+        ports:
+          - ${APP_PORT:-3000}:3000
 networks:
     mon_app_net:
      driver: bridge
