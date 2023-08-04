@@ -50,32 +50,58 @@
 
 version: '3.8'
 services:
-    php-fpm:
-        build:
-            context: ./php-fpm
+    php:
+        image: php:8.2-fpm
         volumes:
-        - ../symfony:/var/www/symfony
+        - /home/dede/mes_projets/my_project/public
+        networks:
+         - mon_app_net
     nginx:
-        build:
-            context: ./nginx
+        image: nginx:latest
         volumes:
-            - ../symfony:/var/www/symfony
-            - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-            - ./nginx/sites/:/etc/nginx/sites-available
-            - ./nginx/conf.d/:/etc/nginx/conf.d
-        depends_on:
-            - php-fpm
+          - docker volume create nginx_volume
+          -
         ports:
-            - "85:85"
-            - "443:443"
-    database:
-        build:
-            context: ./database
+            - "8000:80"
+        depends_on:
+         - mon_app_php 
+        networks:
+        - mon_app_net
         environment:
-            - MYSQL_DATABASE=app2
-            - MYSQL_USER=admin
-            - MYSQL_PASSWORD=password
-            - MYSQL_ROOT_PASSWORD=docker
+         - NGINX_HOST=one-portal.com
+         - NGINX_PORT=8000
+    db:
+        image: mariadb
+        volumes:
+        - docker volume create db_volume
+        - docker run -d --name db -v db_volume:/var/lib/mysql  mariadb
+        
+        restart: always
+        environment:
+            MARIADB_ROOT_PASSWORD: example
+            MARIADB_DATABASE: app2
+            MARIADB_USER: 
+            MARIADB_PASSWORD_HASH:
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - 8080:8080
+    keycloak:
+        image: jboss/keycloak:latest
+        restart: always
+        environment:
+           KEYCLOAK_USER: admin 
+           KEYCLOAK_PASSWORD: admin
+        ports:
+        - "8080:8080"
+        networks:
+        - mon_app_net  
+
+networks:
+    mon_app_net:
+     driver: bridge
+
 # version: "3.7"
 # services:
     # nginx:
