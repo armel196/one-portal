@@ -66,7 +66,7 @@ class LoginAuthenticator extends AbstractAuthenticator
     /**
      * Called on every request to decide if this authenticator should be
      * used for the request. Returning `false` will cause this authenticator
-     * to be skipped.
+     * to be skipped.  
      */
     public function supports(Request $request): ?bool
     {

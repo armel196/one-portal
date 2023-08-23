@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AppsRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -19,6 +21,7 @@ class Apps
     public function __construct()
     {
         $this->update = new \DateTimeImmutable();
+        $this->categories = new ArrayCollection();
     }
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -45,6 +48,9 @@ class Apps
 
     #[ORM\Column(nullable: true)]
     private ?string $imageName = null;
+
+    #[ORM\OneToMany(mappedBy: 'appId', targetEntity: Categorie::class)]
+    private Collection $categories;
 
     public function getId(): ?int
     {
@@ -135,5 +141,35 @@ class Apps
     public function getImageName(): ?string
     {
         return $this->imageName;
+    }
+
+    /**
+     * @return Collection<int, Categorie>
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Categorie $category): static
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+            $category->setAppId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Categorie $category): static
+    {
+        if ($this->categories->removeElement($category)) {
+            // set the owning side to null (unless already changed)
+            if ($category->getAppId() === $this) {
+                $category->setAppId(null);
+            }
+        }
+
+        return $this;
     }
 }

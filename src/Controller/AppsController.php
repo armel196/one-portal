@@ -112,4 +112,5 @@ class AppsController extends AbstractController
 
         return $this->redirectToRoute('app_apps_index', [], Response::HTTP_SEE_OTHER);
     }
+    
 }
